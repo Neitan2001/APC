@@ -8,10 +8,9 @@
 #endif
 
 //Dúvidas
-//1- Tirar dúvida de qual a quantidade máxima de associados
-//2- O identificador do Associado deve ser automático ou manual?
-//3- A quantidade de dependentes deve ser cadastrada no momento do cadastro ou deve ser uma variável que se atualiza de acordo que vai adicionando dependentes?
-//4- O máximo de caracteres dos nomes é 20, logo devo declara o vetor nome[21] ou devo informar ao usuário um limite de 19 caracteres?
+//1- Tirar dúvida de qual a quantidade máxima de associados - Não tem quantidade máxima, coloca 200
+//2- O identificador do Associado deve ser automático ou manual? - Automático
+//3- A quantidade de dependentes deve ser cadastrada no momento do cadastro ou deve ser uma variável que se atualiza de acordo que vai adicionando dependentes? - de acordo que vai adicionando dependentes?
 
 typedef enum { false, true } bool; //Definição de duas variáveis (false e true) e chamando esse tipo de bool
 
@@ -27,6 +26,8 @@ typedef struct Associado
     char nome[20];
     int idade;
     int qtdDep;
+    int qtdAulas;
+    float mensalidade;
     dependente dep[3];
     bool fazNatacao;
     bool fazFutsal;
@@ -38,7 +39,7 @@ void cadastrarDependente(long int *quantidade, associado associados[]);
 
 int main() //Início do Menu Princiapl
 {
-    associado associados[100]; 
+    associado associados[200]; 
     long int quantidade; //essa variável irá controlar a quantidade de associados e irá ser usada nos índices de vetores durante o cadastro
     int item;
 
@@ -86,7 +87,7 @@ void cadastrarAssociado(long int *quantidade, associado associados[]) //Início 
 
     do
     {
-        printf("Digite o nome do Associado (máximo de 19 caracteres): ");
+        printf("Digite o nome do Associado (máximo de 20 caracteres): ");
         scanf("%s", associados[*quantidade].nome); //Cadastro do Nome
 
         system(CLEAR); //Limpar Tela
@@ -105,20 +106,6 @@ void cadastrarAssociado(long int *quantidade, associado associados[]) //Início 
 
         }
         
-
-        
-
-        /*printf("Digite a quantidade de dependentes que esse Associado possui (máximo de 3): "); //Cadastro da Quantidade de dependentes
-        scanf("%d", &associados[*quantidade].qtdDep);
-        while (associados[*quantidade].qtdDep < 0 || associados[*quantidade].qtdDep > 3) //Verificar se a quantidade de dependentes é válida
-        {
-            printf("A quantidade de dependentes deve ser maior ou igual a zero e menor ou igual a 3\n");
-            printf("Digite novamente a quantidade de dependentes: ");
-            scanf("%d", &associados[*quantidade].qtdDep);
-        } */
-
-        associados[*quantidade].qtdDep = 0; //É necessário dar valor inicial de zero nessa variável para que no Cadastro de Dependente seja possível cadastrar quantos dependentes quiser, até três.
-
         printf("Esse Associado faz natação?\n1- Sim\n2- Não\n"); //Cadastro de Natação
         printf("Digite o que deseja fazer: ");
         scanf("%d",&item2);
@@ -134,6 +121,8 @@ void cadastrarAssociado(long int *quantidade, associado associados[]) //Início 
         if (item2==1)
         {
             associados[*quantidade].fazNatacao = true;
+            associados[*quantidade].mensalidade += 30; //Cada aula acrescenta 30 reais na mensalidade do Associado
+            associados[*quantidade].qtdAulas ++; //Acrescentando a quantidade de aulas do associado
         }
         else
         {
@@ -160,6 +149,8 @@ void cadastrarAssociado(long int *quantidade, associado associados[]) //Início 
         if (item3==1)
         {
             associados[*quantidade].fazFutsal = true;
+            associados[*quantidade].mensalidade += 30; //Cada aula acrescenta 30 reais na mensalidade do Associado
+            associados[*quantidade].qtdAulas ++; //Acrescentando a quantidade de aulas do associado
         }
         else
         {
@@ -186,6 +177,8 @@ void cadastrarAssociado(long int *quantidade, associado associados[]) //Início 
         if (item4==1)
         {
             associados[*quantidade].fazTenis = true;
+            associados[*quantidade].mensalidade += 30; //Cada aula acrescenta 30 reais na mensalidade do Associado
+            associados[*quantidade].qtdAulas ++; //Acrescentando a quantidade de aulas do associado
         }
         else
         {
@@ -201,7 +194,7 @@ void cadastrarAssociado(long int *quantidade, associado associados[]) //Início 
         
 
         associados[*quantidade].id = *quantidade; // A id do Associado é feita de forma automática, impedindo dois associados possuam o mesmo id
-        
+        associados[*quantidade].mensalidade += 100; //A cada associado, é imposto o valor de 100 reais na mensalidade
 
         (*quantidade)++;
         
@@ -265,7 +258,7 @@ void cadastrarDependente(long int *quantidade, associado associados[]){ //Iníci
         {
             do
             {
-                printf("Digite o nome do %dº Dependente(máximo de 19 caracteres): ", associados[indice].qtdDep+1); //Cadastro do nome do Dependente
+                printf("Digite o nome do %dº Dependente(máximo de 20 caracteres): ", associados[indice].qtdDep+1); //Cadastro do nome do Dependente
                 scanf(" %s",associados[indice].dep[associados[indice].qtdDep].nome);
 
                 system(CLEAR); //Limpar Tela
@@ -284,6 +277,7 @@ void cadastrarDependente(long int *quantidade, associado associados[]){ //Iníci
             
                 }
 
+                associados[indice].mensalidade += 50; //A cada dependente cadastrado, é acresentado 50 reais na mensalidade
                 associados[indice].qtdDep++; // A quantidade de dependentes aumenta mais um depois do cadastro
 
                 printf("Cadastro Concluído!\nDeseja cadastrar mais um Dependente?\n1- Sim\n2- Não\nDigite o que deseja fazer: ");
